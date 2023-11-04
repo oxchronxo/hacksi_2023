@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "container for hacksi stuff",
   "main": "server.js",
+  "license": "ISC",
   "scripts": {
     "clean": "npm run clean:modules; npm run clean:package-lock",
     "clean:modules": "rm -rf node_modules",
     "clean:package-lock": "rm -rf package-lock.json",
-    "dev": "concurrently \"npm run dev:server\"",
-    "dev:server": "DEBUG=\"\\[hacksi\\]\" DEBUG_HIDE_DATE=true nodemon server.js",
+    "dev": "nodemon server.js",
     "init": "npm run init:certs; npm run refresh:packages;",
     "init:certs": "npm run mkcert:install; npm run mkcert:install:ca; npm run mkcert:install:certs",
     "lint": "eslint",
@@ -18,7 +18,6 @@
     "refresh": "npm run refresh:packages; npm run refresh:certs",
     "refresh:certs": "npm run mkcert:install:certs",
     "refresh:packages": "npm run clean; npm install",
-    "start": "DEBUG_HIDE_DATE=true node server.js",
     "test": "TEST=1 nyc --report-dir \"${COVERAGE_DIR}\" --reporter=text-summary --reporter=lcov mocha --recursive tests/unit/*.spec.js"
   },
   "repository": {
@@ -39,22 +38,10 @@
       "email": "keenan@fehrenbacher.com"
     }
   ],
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/oxchronxo/hacksi_2023/issues"
   },
   "homepage": "https://github.com/oxchronxo/hacksi_2023#readme",
-  "nodemonConfig": {
-    "watch": [
-      "app.js",
-      "middleware",
-      "public",
-      "routes",
-      "server.js",
-      "views"
-    ],
-    "ext": "js,hbs"
-  },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -62,12 +49,10 @@
     "eslint": "^8.53.0",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
-    "http-errors": "^2.0.0",
-    "module-alias": "^2.2.3"
+    "http-errors": "^2.0.0"
   },
   "devDependencies": {
     "assert": "^2.0.0",
-    "concurrently": "^7.6.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "nyc": "^15.1.0",

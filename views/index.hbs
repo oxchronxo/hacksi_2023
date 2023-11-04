@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Default View</title>
+        <title>Index View</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/svg+xml" href="/images/gear.svg" />
         <link rel="stylesheet" type="text/css" href="/styles/base.css">
-        <link rel="stylesheet" type="text/css" href="/styles/default.css">
         <script defer type="application/javascript" src="/scripts/base.js"></script>
         <script defer type="application/javascript" src="/scripts/config.js"></script>
-        <script defer type="application/javascript" src="/scripts/default.js"></script>
+        <script type="application/javascript">
+            window['customParam'] = '{{customParam}}';
+            const someGlobalMethod = () => {
+                console.log('someGlobalMethod');
+            };
+        </script>
     </head>
     <body>
-        <data id="pageData" data="{{pageData}}"></data>
         <header>
-            <div style="background-color:black;display:flex;">
-              <img class="main-logo" src="/images/puppet.png" style="width:30px;height:30px;padding:2px;">
-              <span class="page-header">Default</span>
+            <div style="position:relative">
+              <img id="mainlogo" src="/images/puppet.png" style="width:30px;height:30px">
+              <span id="page-header" class="page-header">Index</span>
+              <img id="config-button" style="position: absolute;top: 36px;right: 0px;" src="/images/gear.svg"></img>
             </div>
         </header>
         <main class="page-content">
+            <div>
+                <img src="/images/user.png" style="width:20px;height:20px;"></img>
+                <span style="font-size:1.2em;">User</span>
+            </div>
             <button onclick="someGlobalMethod()">execute someGlobalMethod</button>
             <p>&nbsp;</p>
             <p>&nbsp; </p>

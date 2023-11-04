@@ -1,3 +1,5 @@
 /**
  * eric
  */
+
+const name = 'Eric';

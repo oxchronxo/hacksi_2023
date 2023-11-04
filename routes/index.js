@@ -6,18 +6,33 @@ const router = require('express').Router();
 
 const routerDependencies = (req, res, next) => {
     // see if there are querystring parameters passed in providing overrides
-    const {
-        customParam
-    } = req.query;
-    // use a customParam to pass data down to views by attaching to the request
-    req.customParam = customParam || {};
-    req.env = process.env.NODE_ENV;
+    // protect incoming variables please
+    const pageDataDefaults = {
+        b: 2
+    };
+    const pageDataQuerystring = JSON.parse(req.query.pageData || '{}');
+    const pageData = Object.assign({}, pageDataDefaults, pageDataQuerystring);
+    req.pageData = JSON.stringify(pageData);
     next();
 };
 
-router.use('/', routerDependencies, require('./default'));
-router.use('/status', require('./status'));
-router.use('/keenan', routerDependencies, require('./keenan'));
-router.use('/eric', routerDependencies, require('./eric'));
+router.use('/status', function(req, res, next) {
+    res.render('status');
+});
+router.use('/keenan', routerDependencies, function(req, res, next) {
+    res.render('keenan', {
+        pageData: req.pageData
+    });
+});
+router.use('/eric', routerDependencies, function(req, res, next) {
+    res.render('eric', {
+        pageData: req.pageData
+    });
+});
+router.use('/', routerDependencies, function(req, res, next) {
+    res.render('default', {
+        pageData: req.pageData
+    });
+});
 
 module.exports = router;

@@ -22,16 +22,17 @@ const loadTag = '[HSI]';
 
 // this gets executed when the page loads
 // but it doesn't wait for all the resources to load
-window.init = async () => {
+window.init = () => {
     console.log(loadTag, 'init');
     // perform page initialization tasks
     // restore saved stuff from local storage
-    const pageState = window.getPageState?.();
+    const pageState = window.getPageState();
     console.log(loadTag, 'pageState', pageState);
-
+    const pageData = window.getPageData();
+    console.log(loadTag, 'pageData', pageData);
 };
 // this gets executed just before the page unloads
-window.destroy = async () => {
+window.destroy = () => {
     console.log(loadTag, 'destroy');
     // perform page destruction tasks
     // construct page state object
@@ -52,7 +53,14 @@ window.someGlobalMethod = () => {
 };
 
 /*---------------------------------------------------------------------------*/
-
+// retrieve page config from dom attribute
+window.getPageData = () => {
+    return JSON.parse(document.getElementById('pageData').getAttribute('data'));
+};
+// record page config to dom attribute
+window.setPageData = (pageData={}) => {
+    document.getElementById('pageData').setAttribute('data', JSON.stringify(pageData));
+};
 // retrieve settings from local storage
 window.getPageState = () => {
     const pageState = sessionStorage.getItem(pageStateStorageName);
@@ -60,7 +68,6 @@ window.getPageState = () => {
     return pageState ? JSON.parse(pageState) : {};
 };
 // record settings in local storage
-// default to empty Object literal
 window.setPageState = (pageState={}) => {
     sessionStorage.setItem(pageStateStorageName, JSON.stringify(pageState));
 };
@@ -70,10 +77,12 @@ window.setPageState = (pageState={}) => {
 /**
  * When page loads
  */
-window.addEventListener('DOMContentLoaded', () => window.init?.());
+// window.addEventListener('DOMContentLoaded', () => window.init?.());
+window.addEventListener('load', () => window.init?.());
 
 /**
  * When page unloads
  * We want to save the state of the page
  */
-window.addEventListener('beforeunload', () => window.destroy?.());
+// window.addEventListener('beforeunload', () => window.destroy?.());
+window.addEventListener('unload', () => window.destroy?.());
