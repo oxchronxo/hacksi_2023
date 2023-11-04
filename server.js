@@ -1,30 +1,27 @@
-// default our env to development
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+/**
+ * server
+ */
 
+// set our debug flag
+process.env.DEBUG = 'Fehrenbachers';
+// check if we are in test mode
+const isTest = process.env.TEST ? true : false;
+
+const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const fs = require('fs');
-const debug = require('debug')('[hacksi]');
+const debug = require('debug')(process.env.DEBUG);
 
 // load our app
 const app = require('./app');
 
-// check if our env is production
-const isProduction = process.env.NODE_ENV === 'production';
-// check if we are in test mode
-const isTest = process.env.TEST ? true : false;
+isTest && debug('Test');
 
-debug('Test', isTest, 'Production', isProduction);
-
-let serverPort = 4080;
-let server = http.createServer(app);
-if (!isProduction && !isTest) {
-    serverPort = 4443;
-    server = https.createServer({
-        key: fs.readFileSync('secrets/key.pem'),
-        cert: fs.readFileSync('secrets/cert.pem'),
-    }, app);
-}
+const serverPort = isTest ? 4080 : 4443;
+const server = isTest ? http.createServer(app) : https.createServer({
+    key: fs.readFileSync('secrets/key.pem'),
+    cert: fs.readFileSync('secrets/cert.pem'),
+}, app);
 server.on('close', () => {
     debug('Server connection closed');
 });
@@ -54,6 +51,6 @@ server.listen(serverPort, () => {
     debug('Ctrl + C to Stop');
 });
 
-if (process.env.TEST) {
+if (isTest) {
     module.exports = server;
 }

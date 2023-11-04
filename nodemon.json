@@ -1,0 +1,14 @@
+{
+    "watch": [
+      "apis",
+      "app.js",
+      "errors",
+      "middleware",
+      "projects",
+      "public",
+      "routes",
+      "server.js",
+      "views"
+    ],
+    "ext": "css,hbs,js,json"
+}
