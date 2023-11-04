@@ -1,5 +1,5 @@
 /**
- * 
+ * base
  */
 window.utilities = {
 
@@ -15,46 +15,65 @@ window.utilities = {
     
 };
 
-const init = async () => {
-    console.log('HACKSI', 'init');
-    // perform page initialization tasks
-
-};
-
 // local storage key name
 const pageStateStorageName = 'hacksi';
+// prefix shown in log messages
+const loadTag = '[HSI]';
+
+// this gets executed when the page loads
+// but it doesn't wait for all the resources to load
+window.init = async () => {
+    console.log(loadTag, 'init');
+    // perform page initialization tasks
+    // restore saved stuff from local storage
+    const pageState = window.getPageState?.();
+    console.log(loadTag, 'pageState', pageState);
+
+};
+// this gets executed just before the page unloads
+window.destroy = async () => {
+    console.log(loadTag, 'destroy');
+    // perform page destruction tasks
+    // construct page state object
+    // stuff we want to remember next time we load the page
+    const pageState = {
+        name: 'HackSI',
+        project: 'main'
+    };
+    // save stuff in local storage for later
+    window.setPageState?.(pageState);
+};
+
+/*---------------------------------------------------------------------------*/
+
+// this is called by the button on the page
+window.someGlobalMethod = () => {
+    console.log(loadTag, 'someGlobalMethod');
+};
+
+/*---------------------------------------------------------------------------*/
 
 // retrieve settings from local storage
-const getPageState = () => {
-    return JSON.parse(sessionStorage.getItem(pageStateStorageName));
+window.getPageState = () => {
+    const pageState = sessionStorage.getItem(pageStateStorageName);
+    // ternary statement
+    return pageState ? JSON.parse(pageState) : {};
 };
 // record settings in local storage
-const setPageState = (pageState={}) => {
+// default to empty Object literal
+window.setPageState = (pageState={}) => {
     sessionStorage.setItem(pageStateStorageName, JSON.stringify(pageState));
 };
 
-/**
- * @event DOMContentLoaded
- */
-window.addEventListener('DOMContentLoaded', async (event) => {
-    init();
-
-    // restore saved stuff from local storage
-    const pageState = getPageState();
-    // verify pageState has properties to work with
-    if (Object.keys(pageState).length !== 0) {
-        // operate on pageState
-
-    }
-
-});
+/*---------------------------------------------------------------------------*/
 
 /**
- * @event onBeforeUnload
+ * When page loads
  */
-window.addEventListener('onBeforeUnload', async (event) => {
-    // construct page state object
-    const pageState = {};
-    // save stuff in local storage for later
-    setPageState(pageState);
-});
+window.addEventListener('DOMContentLoaded', () => window.init?.());
+
+/**
+ * When page unloads
+ * We want to save the state of the page
+ */
+window.addEventListener('beforeunload', () => window.destroy?.());

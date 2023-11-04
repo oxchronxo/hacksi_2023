@@ -4,7 +4,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
-const debug = require('debug')('hacksi');
+const debug = require('debug')('[hacksi]');
 
 // load our app
 const app = require('./app');
@@ -14,8 +14,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 // check if we are in test mode
 const isTest = process.env.TEST ? true : false;
 
-debug('isProduction', isProduction);
-debug('isTest', isTest);
+debug('Test', isTest, 'Production', isProduction);
 
 let serverPort = 4080;
 let server = http.createServer(app);
@@ -56,6 +55,5 @@ server.listen(serverPort, () => {
 });
 
 if (process.env.TEST) {
-    debug('Test', true);
     module.exports = server;
 }

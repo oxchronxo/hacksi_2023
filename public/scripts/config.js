@@ -1,3 +1,3 @@
 /**
- * config loader
+ * config
  */

@@ -1,7 +1,3 @@
-/**
- * routes
- */
-
 const router = require('express').Router();
 
 const routerDependencies = (req, res, next) => {
@@ -15,9 +11,6 @@ const routerDependencies = (req, res, next) => {
     next();
 };
 
-router.use('/', routerDependencies, require('./default'));
-router.use('/status', require('./status'));
-router.use('/keenan', routerDependencies, require('./keenan'));
-router.use('/eric', routerDependencies, require('./eric'));
+router.use('/', routerDependencies, (req, res) => res.send('api'));
 
 module.exports = router;
