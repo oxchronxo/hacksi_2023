@@ -49,7 +49,7 @@ window.destroy = () => {
 
 // this is called by the button on the page
 window.someGlobalMethod = () => {
-    console.log(loadTag, 'someGlobalMethod');
+    console.log(loadTag, 'someGlobalMethod kjasdhfksadjfh');
 };
 
 /*---------------------------------------------------------------------------*/
